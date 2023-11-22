@@ -1,0 +1,4 @@
+
+add_executable(unit_test_lis3mdl_driver unit_test_lis3mdl_driver.cpp)
+
+target_link_libraries(unit_test_lis3mdl_driver lis3mdl_driver gtest gtest_main)
