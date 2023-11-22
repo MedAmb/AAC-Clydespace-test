@@ -18,6 +18,11 @@ constexpr std::uint8_t kControlRegister2{0x21};
 constexpr std::uint8_t kFullScaleOffset{5};
 constexpr std::uint8_t kFullScaleMask{0x03};
 
+constexpr std::uint8_t kIntConfigurationRegister{0x30};
+
+constexpr std::uint8_t kEnableInterruptPinOffset{0};
+constexpr std::uint8_t kEnableInterruptPinMask{0x01};
+
 
 constexpr std::uint8_t kXAxisDataLowRegister{0x28};
 constexpr std::uint8_t kXAxisDataHighRegister{0x29};

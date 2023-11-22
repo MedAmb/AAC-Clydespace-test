@@ -49,6 +49,9 @@ public:
     ReturnCode<OutputDataRate> GetOutputDataRate() const;
     bool SetOutputDataRate(OutputDataRate) const;
 
+    bool EnableInterruptPin() const;
+    bool DisableInterruptPin() const;
+
     ReturnCode<std::int16_t> GetXAxisData() const;
     ReturnCode<std::int16_t> GetYAxisData() const;
     ReturnCode<std::int16_t> GetZAxisData() const;

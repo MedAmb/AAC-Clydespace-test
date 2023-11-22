@@ -149,6 +149,68 @@ TEST_F(LIS3MDL_Driver_Test, SetOutputDataRateFailure) {
     EXPECT_FALSE(lis3mdl_driver.SetOutputDataRate(lis3mdl_driver::OutputDataRate::k80Hz));
 }
 
+TEST_F(LIS3MDL_Driver_Test, EnableInterruptPinSucces) {
+    std::uint8_t expected_enable_interrupt_pin = 0x01;
+    EXPECT_CALL(*mock_i2c_driver_, i2c_read(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            buffer[0] = expected_enable_interrupt_pin << 0;
+            return 0;
+        }));
+    EXPECT_CALL(*mock_i2c_driver_, i2c_write(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            EXPECT_EQ(expected_enable_interrupt_pin << 0, buffer[0]);
+            return 0;
+        }));
+
+    lis3mdl_driver::LIS3MDL_Driver lis3mdl_driver(false);
+    EXPECT_TRUE(lis3mdl_driver.EnableInterruptPin());
+}
+
+TEST_F(LIS3MDL_Driver_Test, EnableInterruptPinFailure) {
+    std::uint8_t expected_enable_interrupt_pin = 0x01;
+    EXPECT_CALL(*mock_i2c_driver_, i2c_read(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            buffer[0] = expected_enable_interrupt_pin << 0;
+            return 0;
+        }));
+    EXPECT_CALL(*mock_i2c_driver_, i2c_write(0x38, 0x30, _, 1))
+        .WillOnce(Return(1));
+
+    lis3mdl_driver::LIS3MDL_Driver lis3mdl_driver(false);
+    EXPECT_FALSE(lis3mdl_driver.EnableInterruptPin());
+}
+
+TEST_F(LIS3MDL_Driver_Test, DisableInterruptPinSucces) {
+    std::uint8_t expected_enable_interrupt_pin = 0x00;
+    EXPECT_CALL(*mock_i2c_driver_, i2c_read(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            buffer[0] = expected_enable_interrupt_pin << 0;
+            return 0;
+        }));
+    EXPECT_CALL(*mock_i2c_driver_, i2c_write(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            EXPECT_EQ(expected_enable_interrupt_pin << 0, buffer[0]);
+            return 0;
+        }));
+
+    lis3mdl_driver::LIS3MDL_Driver lis3mdl_driver(false);
+    EXPECT_TRUE(lis3mdl_driver.DisableInterruptPin());
+}
+
+TEST_F(LIS3MDL_Driver_Test, DisableInterruptPinFailure) {
+    std::uint8_t expected_enable_interrupt_pin = 0x00;
+    EXPECT_CALL(*mock_i2c_driver_, i2c_read(0x38, 0x30, _, 1))
+        .WillOnce(Invoke([expected_enable_interrupt_pin](uint8_t, uint8_t, uint8_t *buffer, uint16_t) {
+            buffer[0] = expected_enable_interrupt_pin << 0;
+            return 0;
+        }));
+    EXPECT_CALL(*mock_i2c_driver_, i2c_write(0x38, 0x30, _, 1))
+        .WillOnce(Return(1));
+
+    lis3mdl_driver::LIS3MDL_Driver lis3mdl_driver(false);
+    EXPECT_FALSE(lis3mdl_driver.DisableInterruptPin());
+}
+
 TEST_F(LIS3MDL_Driver_Test, GetXAxisDataSucces) {
     std::int16_t expected_x_axis_data = 0x1234;
     EXPECT_CALL(*mock_i2c_driver_, i2c_read(0x38, _, _, 1)).Times(2)

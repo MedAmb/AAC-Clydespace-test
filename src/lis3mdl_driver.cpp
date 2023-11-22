@@ -52,6 +52,36 @@ bool LIS3MDL_Driver::SetOutputDataRate(OutputDataRate output_data_rate) const {
   return false;
 }
 
+bool LIS3MDL_Driver::EnableInterruptPin() const {
+
+  auto int_configuration_register = ReadRegister(kIntConfigurationRegister);
+
+  if (int_configuration_register) {
+    auto new_int_configuration_register = InsertValueIntoRegister(
+        int_configuration_register.value, kEnableInterruptPinOffset, 1);
+
+    return WriteRegister(kIntConfigurationRegister,
+                         new_int_configuration_register);
+  }
+
+  return false;
+}
+
+bool LIS3MDL_Driver::DisableInterruptPin() const {
+
+  auto int_configuration_register = ReadRegister(kIntConfigurationRegister);
+
+  if (int_configuration_register) {
+    auto new_int_configuration_register = InsertValueIntoRegister(
+        int_configuration_register.value, kEnableInterruptPinOffset, 0);
+
+    return WriteRegister(kIntConfigurationRegister,
+                         new_int_configuration_register);
+  }
+
+  return false;
+}
+
 ReturnCode<std::int16_t> LIS3MDL_Driver::GetXAxisData() const {
 
   ReturnCode<std::int16_t> result{0, false};
