@@ -1,0 +1,26 @@
+
+name: CMake on a single platform
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: srzzumix/googletest:latest
+      volumes:
+        - ${{github.workspace}}:${{github.workspace}}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: build
+      run: cmake -B ${{github.workspace}}/build && cmake --build ${{github.workspace}}/build
+      
+    - name: unit-test
+      run: ${{github.workspace}}/build/test/unit_test_lis3mdl_driver
+
